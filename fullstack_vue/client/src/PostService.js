@@ -1,0 +1,34 @@
+import axios from 'axios';
+
+const url = 'api/posts/';
+
+class PostService {
+	// get post 
+	static getPosts(){
+		return new Promise(async(resolve, reject) => {
+			try {
+				const res = await axios.get(url);
+				const data = res.data;
+				resolve(
+					data.map(post => ({
+						...post, /* spread operator */
+						created: new Date(post.created)
+					}))
+				);
+			} catch(err){
+				reject(err);
+			}
+		});
+	}
+
+	// create post 
+	static insertPost(text){
+		return axios.post(url,  {text});
+	}
+	// delete post 
+	static deletePost(id){
+		return axios.delete(`${url}${id}`);
+	}
+}
+
+export default PostService;
